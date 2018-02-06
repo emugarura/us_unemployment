@@ -243,10 +243,26 @@
                 style: function(feature) {
                     return {
                         color: 'black',
-                        weight: 1,
+                        weight: 2,
                         fillOpacity: 1,
                         fillColor: '#1f78b4'
                     };
+                },
+                onEachFeature: function(feature, layer) {
+                    // when mousing over a layer
+					layer.on('mouseover', function() {
+						// change the stroke color and bring that element to the front
+						layer.setStyle({
+							color: 'yellow'
+						}).bringToFront();
+					});
+					// on mousing off layer
+					layer.on('mouseout', function() {
+						// reset the layer style to its original stroke color
+						layer.setStyle({
+							color: 'black'
+						});
+					});
                 }
             }).addTo(map);
 
@@ -267,13 +283,23 @@
         }
 
         function updateMap(dataLayer, colorize, currentYear) {
-
+            // call dataLayer for update
             dataLayer.eachLayer(function(layer) {
-
+                // define properties variable
                 var props = layer.feature.properties;
-
+                // adjust the coloring of counties based on the currentYear
                 layer.setStyle({
                     fillColor: colorize(props[currentYear])
+                });
+                // define dynamic content of layer tooltip
+                var tooltipInfo = "<b>" + props["NAME"] +
+    								"</b></br>" +
+    								(props[String(currentYear)]) +
+    								"% Unemployment";
+                // bind the tooltip to the dataLayer
+                layer.bindTooltip(tooltipInfo, {
+                    sticky: true,
+                    tooltipAnchor: [200, 200]
                 });
 
             });
@@ -347,7 +373,7 @@
                 var currentYear = this.value;
                 // update legend header year
                 $('.legend h3 span').html(currentYear);
-                //
+                // update the map year
                 updateMap(dataLayer, colorize, currentYear)
             });
 
