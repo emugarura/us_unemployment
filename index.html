@@ -209,20 +209,20 @@
                         break;
                     }
                 }
-            }
+            };
 
             // setting classification breaks
             // set empty array to store values
             var rates = [];
 
             // interate through counties
-            counties.features.forEach(function(county) {
+            counties.features.forEach(function (county) {
 
                 // interate through counties' properties
                 for (var prop in county.properties) {
 
                     // if attr is number and not FIP code/name
-                    if (prop != "COUNTY_FIP" && prop != "STATE_FIP" && prop != "NAME") {
+                    if (prop != "COUNTY_FIP" && prop != "STATE_FIP" && prop != "NAME" && prop != "GEOID") {
 
                         // push attr value into array
                         rates.push(Number(county.properties[prop]));
