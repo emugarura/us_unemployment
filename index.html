@@ -221,11 +221,11 @@
                 // interate through counties' properties
                 for (var prop in county.properties) {
 
-                    // if attr is number and not FIP code/name
-                    if (prop != "COUNTY_FIP" && prop != "STATE_FIP" && prop != "NAME" && prop != "GEOID") {
+                    // if attr prop is number (our data attributes are numeric years)
+                    if (+prop) {
 
                         // push attr value into array
-                        rates.push(Number(county.properties[prop]));
+                        rates.push(+county.properties[prop]);
                     }
                 }
             });
@@ -266,6 +266,12 @@
 							color: 'black'
 						});
 					});
+
+                    // bind an empty tooltip to the layer
+                    layer.bindTooltip('', {
+                        sticky: true,
+                        tooltipAnchor: [200, 200]
+                    });
                 }
             }).addTo(map);
 
@@ -299,11 +305,8 @@
     								"</b></br>" +
     								(props[String(currentYear)]) +
     								"% Unemployment";
-                // bind the tooltip to the dataLayer
-                layer.bindTooltip(tooltipInfo, {
-                    sticky: true,
-                    tooltipAnchor: [200, 200]
-                });
+                // update the tooltip content
+                layer.setTooltipContent(tooltipInfo)
 
             });
 
